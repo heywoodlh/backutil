@@ -13,6 +13,7 @@ parser = argparse.ArgumentParser(description="Python backup utility")
 parser.add_argument('--path', help='path(s) to backup', metavar='PATH', nargs='+', required='True')
 parser.add_argument('--dest', help='destination of backup', metavar='DEST', required='True')
 parser.add_argument('-z', '--zip', help='use gzip to compress the backup file', action="store_true")
+parser.add_argument('-v', '--verbose', help='enable verbose output', action="store_true")
 parser.add_argument('-q', '--quiet', help='suppress output', action="store_true")
 
 args = parser.parse_args()
@@ -40,6 +41,19 @@ def backup(paths, dest):
             log.error('Invalid path. Skipping: ' + path)
             path_status = 'False'
         if path_status == 'True':
+            if args.verbose:
+                if args.quiet:
+                    log.error('Cannot use verbose and quiet arguments simultaneously.')
+                    log.info('Quitting.')
+                    sys.exit(1)
+                log.info(path + ' => ' + dest)
+            elif args.quiet:
+                if args.verbose:
+                    log.error('Cannot use verbose and quiet arguments simultaneously.')
+                    log.info('Quitting.')
+                    sys.exit(1)
+            else:
+                log.info(path)
             tar.add(path)
     tar.close()
 
