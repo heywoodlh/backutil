@@ -47,19 +47,21 @@ def webdav_auth(config_file):
         config.read(config_file)
         try:
             if config['WEBDAV']['Username']:
-                username = config['WEBDAV']['Username']
+                username = str(config['WEBDAV']['Username'])
             if config['WEBDAV']['Command']:
                 password = subprocess.check_output(config['WEBDAV']['Command'], shell=True)
-                password = password.decode("utf-8")
+                password = str(password.decode("utf-8"))
+                password = password.rstrip()
             elif config['WEBDAV']['Password']:
-                password = config['WEBDAV']['Password']
+                password = str(config['WEBDAV']['Password'])
+                password = password.rstrip()
         except:
             username = input('WebDav Username: ')
             password = getpass.getpass('WebDav Password: ')
     else:
         username = input('WebDav Username: ')
         password = getpass.getpass('WebDav Password: ')
-    
+
 def webdav_upload(file, url, username, password):
     if not 'remote.php/dav' in url:
         url = url + '/remote.php/dav'
