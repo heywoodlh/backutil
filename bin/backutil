@@ -2,9 +2,12 @@
 import os
 import sys
 import getpass
+import pathlib
 import logging
 import argparse
 import gzip
+import configparser
+import subprocess
 
 import requests
 
@@ -13,11 +16,15 @@ import tarfile
 ## argparse arguments
 parser = argparse.ArgumentParser(description="Python backup utility")
 
+backutil_config = str(pathlib.Path.home()) + '/.backutil.conf'
+
 ## Backup subparser
 parser.add_argument('--path', help='path(s) to backup', metavar='PATH', nargs='+', required='True')
 parser.add_argument('--dest', help='destination of backup', metavar='DEST', required='True')
 parser.add_argument('--webdav', help='WebDav URL to upload to', metavar='URL')
+parser.add_argument('-r', '--remote', help='Remote WebDav path to upload to', metavar='REMOTE PATH')
 parser.add_argument('-z', '--zip', help='use gzip to compress the backup file', action="store_true")
+parser.add_argument('--rm', help='remove local backup file', action="store_true")
 parser.add_argument('-v', '--verbose', help='enable verbose output', action="store_true")
 parser.add_argument('-q', '--quiet', help='suppress output', action="store_true")
 
@@ -32,12 +39,35 @@ def check_dest(dest):
         log.error('Invalid dest: ' + dest)
         sys.exit(1)
 
-
+def webdav_auth(config_file):
+    config = configparser.ConfigParser()
+    global username
+    global password
+    if os.path.isfile(config_file):
+        config.read(config_file)
+        try:
+            if config['WEBDAV']['Username']:
+                username = config['WEBDAV']['Username']
+            if config['WEBDAV']['Command']:
+                password = subprocess.check_output(config['WEBDAV']['Command'], shell=True)
+                password = password.decode("utf-8")
+            elif config['WEBDAV']['Password']:
+                password = config['WEBDAV']['Password']
+        except:
+            username = input('WebDav Username: ')
+            password = getpass.getpass('WebDav Password: ')
+    else:
+        username = input('WebDav Username: ')
+        password = getpass.getpass('WebDav Password: ')
+    
 def webdav_upload(file, url, username, password):
     if not 'remote.php/dav' in url:
         url = url + '/remote.php/dav'
     url = url + '/files/' + username + '/'
-    webdav_path = input('Remote Path: ')
+    if args.remote:
+        webdav_path = str(args.remote)
+    else:
+        webdav_path = input('Remote Path: ')
     url = url + webdav_path
     if args.zip:
         f = gzip.open(file, 'rb')
@@ -82,12 +112,12 @@ def backup(paths, dest):
 def main():
     check_dest(args.dest)
     dest = args.dest
-    if args.webdav:
-        username = input('WebDav Username: ')
-        password = getpass.getpass('WebDav Password: ')
     backup(args.path, dest)
     if args.webdav:
+        webdav_auth(backutil_config)
         webdav_upload(dest, args.webdav, username, password)
+    if args.rm:
+        os.remove(dest)
 
 if __name__ == '__main__':
     main()
