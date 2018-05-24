@@ -50,4 +50,4 @@ Backup file and upload to Nextcloud Webdav (currently doesn't support uploading 
 `❯ backutil --path tmp.txt tmp2.txt --dest ~/file.tar --webdav 'https://cloud.example.com:8080/`
 
 
-Currently WebDav functionality has only been tested on an instance of Nextcloud. Also, the webdav functionality does not support uploading a gzip compressed file currently.
+Currently WebDav functionality has only been tested on an instance of Nextcloud.

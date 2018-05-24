@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='backutil',
-      version='0.1',
+      version='0.1.3',
       description='Python backup utility',
       long_description=readme(),
       url='https://github.com/heywoodlh/backutil',
@@ -14,4 +14,7 @@ setup(name='backutil',
       license='APACHE-2.0',
       packages=['backutil'],
       scripts=['bin/backutil'],
+      install_requires=[
+          'requests',
+      ],
       zip_safe=False)
