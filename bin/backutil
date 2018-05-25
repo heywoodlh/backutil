@@ -22,7 +22,7 @@ backutil_config = str(pathlib.Path.home()) + '/.backutil.conf'
 parser.add_argument('--path', help='path(s) to backup', metavar='PATH', nargs='+', required='True')
 parser.add_argument('--dest', help='destination of backup', metavar='DEST', required='True')
 parser.add_argument('--webdav', help='WebDav URL to upload to', metavar='URL')
-parser.add_argument('-r', '--remote', help='Remote WebDav path to upload to', metavar='REMOTE PATH')
+parser.add_argument('--remote', help='Remote WebDav path to upload to', metavar='REMOTE PATH')
 parser.add_argument('-z', '--zip', help='use gzip to compress the backup file', action="store_true")
 parser.add_argument('--rm', help='remove local backup file', action="store_true")
 parser.add_argument('-v', '--verbose', help='enable verbose output', action="store_true")
