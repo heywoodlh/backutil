@@ -14,9 +14,10 @@ Install using `pip`:
 
 ## Usage:
 ```
-❯ ./bin/backutil --help
+❯ backutil --help
 usage: backutil [-h] --path PATH [PATH ...] --dest DEST [--webdav URL]
-                [--remote REMOTE PATH] [-z] [--rm] [-v] [-q]
+                [--remote REMOTE PATH] [--encrypt RECIPIENT] [-z] [--rm] [-v]
+                [-q]
 
 Python backup utility
 
@@ -27,6 +28,7 @@ optional arguments:
   --dest DEST           destination of backup
   --webdav URL          WebDav URL to upload to
   --remote REMOTE PATH  Remote WebDav path to upload to
+  --encrypt RECIPIENT   Use gpg to encrypt file
   -z, --zip             use gzip to compress the backup file
   --rm                  remove local backup file
   -v, --verbose         enable verbose output
