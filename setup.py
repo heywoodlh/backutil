@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='backutil',
-      version='0.1.5',
+      version='0.1.6',
       description='Python backup utility',
       long_description=readme(),
       long_description_content_type="text/markdown",
