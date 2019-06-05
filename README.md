@@ -51,7 +51,7 @@ Backup and compress to a .tar.gz archive, supressing output:
 `❯ backutil --path tmp.txt tmp2.txt --dest ~/Documents/file.tar.gz -z -q`
 
 Backup file, zip it and upload to Nextcloud Webdav as file.tar.gz in the Nextcloud user's root directory: 
-`❯ backutil --path tmp.txt tmp2.txt --dest ~/file.tar.gz --webdav 'https://cloud.example.com:8080/ --remote file.tar.gz -z`
+`❯ backutil --path tmp.txt tmp2.txt --dest ~/file.tar.gz --webdav 'https://cloud.example.com:8080/' --remote file.tar.gz -z`
 
 
 ### Configuration:
