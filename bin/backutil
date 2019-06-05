@@ -14,14 +14,17 @@ import requests
 import tarfile
 import gnupg
 
+
+version = '0.1.6'
+
 ## argparse arguments
 parser = argparse.ArgumentParser(description="Python backup utility")
 
 backutil_config = str(pathlib.Path.home()) + '/.backutil.conf'
 
 ## Backup subparser
-parser.add_argument('--path', help='path(s) to backup', metavar='PATH', nargs='+', required='True')
-parser.add_argument('--dest', help='destination of backup', metavar='DEST', required='True')
+parser.add_argument('--path', help='path(s) to backup', metavar='PATH', nargs='+', default='')
+parser.add_argument('-o', '--outfile', help='output file of backup', metavar='OUTFILE', default='')
 parser.add_argument('--webdav', help='WebDav URL to upload to', metavar='URL')
 parser.add_argument('--remote', help='Remote WebDav path to upload to', metavar='REMOTE PATH')
 parser.add_argument('--encrypt', help='Use gpg to encrypt file', metavar='RECIPIENT')
@@ -30,6 +33,7 @@ parser.add_argument('--rm', help='remove local backup file', action="store_true"
 parser.add_argument('-v', '--verbose', help='enable verbose output', action="store_true")
 parser.add_argument('-q', '--quiet', help='suppress output', action="store_true")
 parser.add_argument('-i', '--insecure', help='ignore SSL certificate warnings', action="store_true")
+parser.add_argument('-V', '--version', help='print version of backutil', action="store_true")
 
 args = parser.parse_args()
 
@@ -156,8 +160,15 @@ def backup(paths, dest):
 
 
 def main():
-    check_dest(args.dest)
-    dest = args.dest
+    if args.version:
+        print(version)
+        sys.exit(0)
+    if args.path == '' or args.outfile == '':
+        print("--path and --outfile are required arguments \n")
+        parser.print_help()
+        sys.exit(0)
+    check_dest(args.outfile)
+    dest = args.outfile
     backup(args.path, dest)
     if args.encrypt:
         encrypt(dest, str(args.encrypt))

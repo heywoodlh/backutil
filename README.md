@@ -15,9 +15,9 @@ Install using `pip`:
 ## Usage:
 ```
 ❯ backutil --help
-usage: backutil [-h] --path PATH [PATH ...] --dest DEST [--webdav URL]
+usage: backutil [-h] [--path PATH [PATH ...]] [-o OUTFILE] [--webdav URL]
                 [--remote REMOTE PATH] [--encrypt RECIPIENT] [-z] [--rm] [-v]
-                [-q]
+                [-q] [-i] [-V]
 
 Python backup utility
 
@@ -25,7 +25,8 @@ optional arguments:
   -h, --help            show this help message and exit
   --path PATH [PATH ...]
                         path(s) to backup
-  --dest DEST           destination of backup
+  -o OUTFILE, --outfile OUTFILE
+                        output file of backup
   --webdav URL          WebDav URL to upload to
   --remote REMOTE PATH  Remote WebDav path to upload to
   --encrypt RECIPIENT   Use gpg to encrypt file
@@ -33,25 +34,30 @@ optional arguments:
   --rm                  remove local backup file
   -v, --verbose         enable verbose output
   -q, --quiet           suppress output
+  -i, --insecure        ignore SSL certificate warnings
+  -V, --version         print version of backutil
 ```
 
 
 ### Example commands:
 
 Backup two files to a .tar archive:
-`❯ backutil --path tmp.txt tmp2.txt --dest ~/Documents/file.tar`
+`❯ backutil --path tmp.txt tmp2.txt --outfile ~/Documents/file.tar`
 
 Backup and compress to .tar.gz archive:
-`❯ backutil --path tmp.txt tmp2.txt --dest ~/Documents/file.tar.gz -z`
+`❯ backutil --path tmp.txt tmp2.txt --outfile ~/Documents/file.tar.gz -z`
 
 Backup to a .tar archive verbosely:
-`❯ backutil --path tmp.txt tmp2.txt --dest ~/Documents/file.tar -v`
+`❯ backutil --path tmp.txt tmp2.txt --outfile ~/Documents/file.tar -v`
 
 Backup and compress to a .tar.gz archive, supressing output:
-`❯ backutil --path tmp.txt tmp2.txt --dest ~/Documents/file.tar.gz -z -q`
+`❯ backutil --path tmp.txt tmp2.txt --outfile ~/Documents/file.tar.gz -z -q`
 
 Backup file, zip it and upload to Nextcloud Webdav as file.tar.gz in the Nextcloud user's root directory: 
-`❯ backutil --path tmp.txt tmp2.txt --dest ~/file.tar.gz --webdav 'https://cloud.example.com:8080/' --remote file.tar.gz -z`
+`❯ backutil --path tmp.txt tmp2.txt --outfile ~/file.tar.gz --webdav 'https://cloud.example.com:8080/' --remote file.tar.gz -z`
+
+Backup files, zip them and upload the archive to Nextcloud Webdav as file.tar.gz in the Nextcloud user's root directory, then remove the local archive: 
+`❯ backutil --path tmp.txt tmp2.txt --outfile ~/file.tar.gz --webdav 'https://cloud.example.com:8080/' --remote file.tar.gz -z --rm`
 
 
 ### Configuration:
